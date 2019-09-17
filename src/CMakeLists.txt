@@ -18,6 +18,8 @@
 
 # Note: on OS X you should install XCode and the associated command-line tools
 
+find_package(Threads)
+
 ## compilation/linkage settings
 INCLUDE_DIRECTORIES(
     .
@@ -58,13 +60,15 @@ IF (WIN32)
     SET(LIBS_SYSTEM ws2_32)
 ELSEIF (UNIX)
     IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
-        SET(LIBS_SYSTEM c dl pthread)
+        SET(LIBS_SYSTEM c dl)
     ELSEIF (CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
-        SET(LIBS_SYSTEM compat pthread)
+        SET(LIBS_SYSTEM compat)
     ELSE()
-        SET(LIBS_SYSTEM c pthread)
+        SET(LIBS_SYSTEM c)
     ENDIF()
 ENDIF()
+
+SET(LIBS_SYSTEM ${LIBS_SYSTEM} ${CMAKE_THREAD_LIBS_INIT})
 
 ## common compilation for libpaho-mqtt3c and libpaho-mqtt3a
 ADD_LIBRARY(common_obj OBJECT ${common_src})
